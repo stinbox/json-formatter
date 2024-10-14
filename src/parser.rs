@@ -17,7 +17,7 @@ pub enum JsonParserError {
     UnexpectedEndOfInput,
 }
 
-fn parser(tokens: &Vec<JsonToken>) -> Result<JsonValue, JsonParserError> {
+pub fn parser(tokens: &Vec<JsonToken>) -> Result<JsonValue, JsonParserError> {
     let mut tokens = tokens.iter().peekable();
     parser_value(&mut tokens)
 }
@@ -100,7 +100,6 @@ fn parser_object(
                 return Ok(JsonValue::Object(object));
             }
             _ => {
-                println!("here????");
                 return Err(JsonParserError::UnexpectedToken(token.clone()));
             }
         }

@@ -15,6 +15,24 @@ pub enum JsonToken {
     Number(f64),
 }
 
+impl std::fmt::Display for JsonToken {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            JsonToken::LeftSquareBracket => write!(f, "["),
+            JsonToken::LeftCurlyBracket => write!(f, "{{"),
+            JsonToken::RightSquareBracket => write!(f, "]"),
+            JsonToken::RightCurlyBracket => write!(f, "}}"),
+            JsonToken::Colon => write!(f, ":"),
+            JsonToken::Comma => write!(f, ","),
+            JsonToken::True => write!(f, "true"),
+            JsonToken::False => write!(f, "false"),
+            JsonToken::Null => write!(f, "null"),
+            JsonToken::String(value) => write!(f, "\"{}\"", value),
+            JsonToken::Number(value) => write!(f, "{}", value),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq)]
 pub enum JsonTokenizeError {
     UnexpectedLiteral(String),
