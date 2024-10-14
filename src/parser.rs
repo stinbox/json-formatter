@@ -19,7 +19,11 @@ pub enum JsonParserError {
 
 pub fn parser(tokens: &Vec<JsonToken>) -> Result<JsonValue, JsonParserError> {
     let mut tokens = tokens.iter().peekable();
-    parser_value(&mut tokens)
+    let result = parser_value(&mut tokens);
+    if let Some(&token) = tokens.peek() {
+        return Err(JsonParserError::UnexpectedToken(token.clone()));
+    };
+    result
 }
 
 fn parser_value(
