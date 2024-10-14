@@ -172,7 +172,6 @@ fn tokenize_literal(chars: &mut Peekable<Chars>) -> Result<JsonToken, JsonTokeni
 }
 
 #[cfg(test)]
-
 mod tests {
     use super::*;
 

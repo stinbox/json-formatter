@@ -169,6 +169,7 @@ fn parser_array(
     Err(JsonParserError::UnexpectedEndOfInput)
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
 
