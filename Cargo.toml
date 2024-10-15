@@ -5,5 +5,11 @@ edition = "2021"
 
 [lib]
 name = "json_formatter"
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+wasm-bindgen = { optional = true, version = "0.2" }
+
+[features]
+wasm = ["dep:wasm-bindgen"]
+default = ["wasm"]

@@ -2,6 +2,7 @@ pub mod formatter;
 pub mod parser;
 pub mod tokenizer;
 
+#[cfg_attr(feature="wasm", wasm_bindgen::prelude::wasm_bindgen)]
 pub fn format_json(content: String) -> String {
     let mut tokens = match tokenizer::tokenize(&content) {
         Ok(tokens) => tokens,
