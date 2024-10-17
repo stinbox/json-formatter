@@ -16,6 +16,18 @@ pub enum JsonParserError {
     UnexpectedToken(JsonToken),
     UnexpectedEndOfInput,
 }
+impl std::fmt::Display for JsonParserError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::UnexpectedEndOfInput => {
+                write!(f, "Unexpected end of input")
+            }
+            Self::UnexpectedToken(token) => {
+                write!(f, "Unexpected token: '{}'", token)
+            }
+        }
+    }
+}
 
 pub fn parser(tokens: &Vec<JsonToken>) -> Result<JsonValue, JsonParserError> {
     let mut tokens = tokens.iter().peekable();

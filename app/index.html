@@ -23,7 +23,7 @@
                 try {
                     formattedJson.innerHTML = format_json(event.currentTarget.value);
                 } catch(e) {
-                    formattedJson.innerText = "<invalid json>"
+                    formattedJson.innerText = e
                 }
             }
         );

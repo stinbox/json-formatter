@@ -31,7 +31,8 @@ fn main() {
         }
     };
 
-    let formatted = json_formatter::format_json(content);
+    let formatted = json_formatter::format_json(content)
+        .expect("Failed to format JSON");
 
     println!("{}", formatted);
 }

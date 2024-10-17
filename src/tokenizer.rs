@@ -41,6 +41,27 @@ pub enum JsonTokenizeError {
     InvalidEscapeCharacter(String),
     InvalidNumberLiteral(String),
 }
+impl std::fmt::Display for JsonTokenizeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::InvalidEscapeCharacter(character) => {
+                write!(f, "Invalid escape character: '{}'", character)
+            }
+            Self::InvalidNumberLiteral(literal) => {
+                write!(f, "Invalid number literal: '{}'", literal)
+            }
+            Self::UnexpectedCharacter(character) => {
+                write!(f, "Unexpected character: '{}'", character)
+            }
+            Self::UnexpectedEndOfInput => {
+                write!(f, "Unexpected end of input")
+            }
+            Self::UnexpectedLiteral(literal) => {
+                write!(f, "Unexpected literal: '{}'", literal)
+            }
+        }
+    }
+}
 
 type JsonTokenizeResult = Result<Vec<JsonToken>, JsonTokenizeError>;
 

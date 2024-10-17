@@ -1,48 +1,17 @@
+pub mod error;
 pub mod formatter;
 pub mod parser;
 pub mod tokenizer;
 
-#[cfg_attr(feature="wasm", wasm_bindgen::prelude::wasm_bindgen)]
-pub fn format_json(content: String) -> String {
-    let mut tokens = match tokenizer::tokenize(&content) {
-        Ok(tokens) => tokens,
-        Err(error) => {
-            match error {
-                tokenizer::JsonTokenizeError::InvalidEscapeCharacter(character) => {
-                    eprintln!("Invalid escape character: '{}'", character);
-                }
-                tokenizer::JsonTokenizeError::InvalidNumberLiteral(literal) => {
-                    eprintln!("Invalid number literal: '{}'", literal);
-                }
-                tokenizer::JsonTokenizeError::UnexpectedCharacter(character) => {
-                    eprintln!("Unexpected character: '{}'", character);
-                }
-                tokenizer::JsonTokenizeError::UnexpectedEndOfInput => {
-                    eprintln!("Unexpected end of input");
-                }
-                tokenizer::JsonTokenizeError::UnexpectedLiteral(literal) => {
-                    eprintln!("Unexpected literal: '{}'", literal);
-                }
-            }
-            std::process::exit(1);
-        }
-    };
+pub fn format_json(content: String) -> Result<String, error::Error> {
+    let mut tokens = tokenizer::tokenize(&content)?;
+    let parsed = parser::parser(&mut tokens)?;
+    let formatted = formatter::format(&parsed);
+    Ok(formatted)
+}
 
-    let parsed = match parser::parser(&mut tokens) {
-        Ok(parsed) => parsed,
-        Err(error) => {
-            match error {
-                parser::JsonParserError::UnexpectedEndOfInput => {
-                    eprintln!("Unexpected end of input");
-                }
-                parser::JsonParserError::UnexpectedToken(token) => {
-                    eprintln!("Unexpected token: '{}'", token);
-                }
-            }
-
-            std::process::exit(1);
-        }
-    };
-
-    formatter::format(&parsed)
+#[cfg(feature="wasm")]
+#[wasm_bindgen::prelude::wasm_bindgen(js_name = format_json)]
+pub fn format_json_for_wasm(content: String) -> Result<String, String> {
+    format_json(content).map_err(|e| e.to_string())
 }
