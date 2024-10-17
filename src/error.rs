@@ -37,6 +37,9 @@ impl From<JsonTokenizeError> for Error {
     }
 }
 
+//////////////////////////////////////////////////////////
+
+// `#[wasm_bindgen]` な関数のエラーとして使えるように
 impl Into<wasm_bindgen::JsValue> for Error {
     fn into(self) -> wasm_bindgen::JsValue {
         wasm_bindgen::JsValue::from_str(&self.to_string())
