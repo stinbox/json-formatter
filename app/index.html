@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON formatter</title>
+</head>
+
+<body>
+    <input id="json-input" type="text"/>
+    <pre style="border:1px solid; height: fit-content;"><code id="formatted-json"></code></pre>
+
+    <script type="module">
+        import init, { format_json } from "./pkg/json_formatter.js"
+
+        await init();
+
+        const jsonInput = document.getElementById("json-input");
+        const formattedJson = document.getElementById("formatted-json");
+
+        jsonInput.addEventListener(
+            "input", (event) => {
+                try {
+                    formattedJson.innerHTML = format_json(event.currentTarget.value);
+                } catch(e) {
+                    formattedJson.innerText = e
+                }
+            }
+        );
+    </script>
+</body>
+</html>

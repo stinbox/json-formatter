@@ -1,9 +1,5 @@
 use std::{env, fs};
 
-use json_formatter::formatter;
-use json_formatter::parser;
-use json_formatter::tokenizer;
-
 fn main() {
     let mut args = env::args();
 
@@ -35,47 +31,8 @@ fn main() {
         }
     };
 
-    let mut tokens = match tokenizer::tokenize(&content) {
-        Ok(tokens) => tokens,
-        Err(error) => {
-            match error {
-                tokenizer::JsonTokenizeError::InvalidEscapeCharacter(character) => {
-                    eprintln!("Invalid escape character: '{}'", character);
-                }
-                tokenizer::JsonTokenizeError::InvalidNumberLiteral(literal) => {
-                    eprintln!("Invalid number literal: '{}'", literal);
-                }
-                tokenizer::JsonTokenizeError::UnexpectedCharacter(character) => {
-                    eprintln!("Unexpected character: '{}'", character);
-                }
-                tokenizer::JsonTokenizeError::UnexpectedEndOfInput => {
-                    eprintln!("Unexpected end of input");
-                }
-                tokenizer::JsonTokenizeError::UnexpectedLiteral(literal) => {
-                    eprintln!("Unexpected literal: '{}'", literal);
-                }
-            }
-            std::process::exit(1);
-        }
-    };
-
-    let parsed = match parser::parser(&mut tokens) {
-        Ok(parsed) => parsed,
-        Err(error) => {
-            match error {
-                parser::JsonParserError::UnexpectedEndOfInput => {
-                    eprintln!("Unexpected end of input");
-                }
-                parser::JsonParserError::UnexpectedToken(token) => {
-                    eprintln!("Unexpected token: '{}'", token);
-                }
-            }
-
-            std::process::exit(1);
-        }
-    };
-
-    let formatted = formatter::format(&parsed);
+    let formatted = json_formatter::format_json(content)
+        .expect("Failed to format JSON");
 
     println!("{}", formatted);
 }
